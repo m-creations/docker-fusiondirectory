@@ -19,6 +19,7 @@ Give it two env vars for connecting to LDAP server:
 * `LDAP_DOMAIN`
 * `LDAP_ROOTPW`
 
+To check Fusiondirectory's GUI fo http://localhost:12080 in interet browser insice docker host.
 
 Github Repo
 -----------
