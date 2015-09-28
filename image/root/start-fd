@@ -1,0 +1,74 @@
+#!/bin/bash
+
+printf "Starting slapd ... ";
+
+if [ -z $LDAP_DOMAIN ] ; then
+    printf "\n\nLDAP_DOMAIN is not defined!\n"
+    exit 1
+fi
+
+if [ -z $LDAP_ROOTPW ] ; then
+    printf "\n\nLDAP_ROOTPW is not defined!\n"
+    exit 1
+fi
+
+IFS='.' read -a domain_elems <<< "$LDAP_DOMAIN"
+
+suffix=""
+for elem in "${domain_elems[@]}" ; do
+    if [ "x$suffix" = x ] ; then 
+  suffix="dc=$elem"
+    else
+  suffix="$suffix,dc=$elem"
+    fi
+done
+
+basedn="dc=`echo $LDAP_DOMAIN | sed 's/^\.//; s/\.$//; s/\./,dc=/g'`"
+dc="`echo $LDAP_DOMAIN | sed 's/^\.//; s/\..*$//'`"
+
+printf "Admin DN is cn=manager,$suffix\n\n"
+
+cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
+<?xml version="1.0"?>
+<conf configVersion="ad159b2e5147d84bebd91dfe8ea252b1" >
+
+  <!-- Services **************************************************************
+    Old services that are not based on simpleService needs to be listed here
+   -->
+  <serverservice>
+    <tab class="serviceDHCP"        />
+    <tab class="serviceDNS"         />
+  </serverservice>
+
+  <!-- Main section **********************************************************
+       The main section defines global settings, which might be overridden by
+       each location definition inside.
+
+       For more information about the configuration parameters, take a look at
+       the FusionDirectory.conf(5) manual page.
+  -->
+  <main default="default"
+        logging="TRUE"
+        displayErrors="FALSE"
+        forceSSL="FALSE"
+        templateCompileDirectory="/var/spool/fusiondirectory/"
+        debugLevel="0"
+    >
+
+    <!-- Location definition -->
+    <location name="default"
+        config="ou=fusiondirectory,ou=configs,ou=systems,$suffix">
+
+        <referral URI="ldap://ldap-server:389/$suffix"
+                        adminDn="cn=admin,$suffix"
+                        adminPassword="$LDAP_ROOTPW" />
+    </location>
+  </main>
+</conf>
+EOF
+
+
+yes Yes | fusiondirectory-setup --check-config
+
+
+/usr/sbin/apachectl -DFOREGROUND
