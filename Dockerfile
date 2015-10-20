@@ -1,7 +1,9 @@
-## -*- docker-image-name: "mcreations/debian-fusiondirectory  " -*-
+## -*- docker-image-name: "mcreations/fusiondirectory" -*-
 
 FROM debian:jessie
 MAINTAINER Reza Rahimi <rahimi@m-creations.net>
+
+ENV LDAP_PORT 389
 
 ADD image/root/ /
 
