@@ -4,6 +4,8 @@ FROM debian:jessie
 MAINTAINER Reza Rahimi <rahimi@m-creations.net>
 
 ENV LDAP_PORT 389
+ENV LDAP_HOST ldap-server
+ENV LDAP_SERVER_URL ldap://${LDAP_HOST}:${LDAP_PORT}
 
 ADD image/root/ /
 

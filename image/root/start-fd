@@ -59,7 +59,7 @@ cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
     <location name="default"
         config="ou=fusiondirectory,ou=configs,ou=systems,$suffix">
 
-        <referral URI="ldap://ldap-server:$LDAP_PORT/$suffix"
+        <referral URI="$LDAP_SERVER_URL/$suffix"
                         adminDn="cn=admin,$suffix"
                         adminPassword="$LDAP_ROOTPW" />
     </location>

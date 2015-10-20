@@ -16,9 +16,14 @@ docker run -p 12080:80 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret --link l
 
 Give it two env vars for connecting to LDAP server:
 
+* `LDAP_HOST` default value is ldap-server
+* `ldap-server` should link with this name with an existing mcreations/openwrt-ldap-fd docker container with --link switch or should be a defined host with --add-host switch
+** `--link` <ldap-docker-name>:ldap-server
+** `--add-host` ldap-server:<ldap-server-ip-address>
+* `LDAP_PORT` default is 389
+* `LDAP_SERVER_URL` default value is ldap://${LDAP_HOST}:${LDAP_PORT}
 * `LDAP_DOMAIN`
 * `LDAP_ROOTPW`
-* `LDAP_PORT` default is 389
 
 To check Fusiondirectory's GUI fo http://localhost:12080 in interet browser insice docker host.
 
