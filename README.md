@@ -18,8 +18,8 @@ Give it two env vars for connecting to LDAP server:
 
 * `LDAP_HOST` default value is ldap-server
 * `ldap-server` should link with this name with an existing mcreations/openwrt-ldap-fd docker container with --link switch or should be a defined host with --add-host switch
-..* `--link` <ldap-docker-name>:ldap-server
-..* `--add-host` ldap-server:<ldap-server-ip-address>
+  * `--link` <ldap-docker-name>:ldap-server
+  * `--add-host` ldap-server:<ldap-server-ip-address>
 * `LDAP_PORT` default is 389
 * `LDAP_SERVER_URL` default value is ldap://${LDAP_HOST}:${LDAP_PORT}
 * `LDAP_DOMAIN`
