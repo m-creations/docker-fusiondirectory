@@ -27,6 +27,9 @@ Give it two env vars for connecting to LDAP server:
 
 To check Fusiondirectory's GUI fo http://localhost:12080 in interet browser insice docker host.
 
+For instlling more plugin, it is possible to add more packages for installing to Dockerfile like 
+```fusiondirectory-plugin-alias=${FUSIONDIRECTORY_DEB_PKG_VERSION}```
+
 Github Repo
 -----------
 https://github.com/m-creations/docker-fusiondirectory
