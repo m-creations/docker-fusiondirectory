@@ -12,7 +12,13 @@ ENV FUSIONDIRECTORY_DEB_PKG_VERSION 1.0.8.2-5+deb8u1
 ADD image/root/ /
 
 RUN apt-get update && \
-    apt-get install -y apache2 php5 php-pear php-mdb2 fusiondirectory=${FUSIONDIRECTORY_DEB_PKG_VERSION} fusiondirectory-plugin-mail=${FUSIONDIRECTORY_DEB_PKG_VERSION} vim && \
+    apt-get install -y apache2 php5 php-pear php-mdb2 vim \
+    fusiondirectory=${FUSIONDIRECTORY_DEB_PKG_VERSION} \
+    fusiondirectory-plugin-mail=${FUSIONDIRECTORY_DEB_PKG_VERSION} \
+    fusiondirectory-plugin-systems=${FUSIONDIRECTORY_DEB_PKG_VERSION} \
+    fusiondirectory-plugin-ldapdump=${FUSIONDIRECTORY_DEB_PKG_VERSION} \
+    fusiondirectory-plugin-ldapmanager=${FUSIONDIRECTORY_DEB_PKG_VERSION} \
+    fusiondirectory-plugin-weblink=${FUSIONDIRECTORY_DEB_PKG_VERSION}  && \
     a2dissite 000-default && \
     a2disconf fusiondirectory && \
     a2ensite fusiondirectory
