@@ -23,7 +23,8 @@ Give it two env vars for connecting to LDAP server:
 * `LDAP_PORT` default is 389
 * `LDAP_SERVER_URL` default value is ldap://${LDAP_HOST}:${LDAP_PORT}
 * `LDAP_DOMAIN`
-* `LDAP_ROOTPW`
+* `LDAP_ADMIN_PW`
+* `LDAP_ADMIN_DN` default value is cn=Manager,@SUFFIX@
 
 To check Fusiondirectory's GUI fo http://localhost:12080 in interet browser insice docker host.
 

@@ -1,14 +1,14 @@
 #!/bin/bash
 
-printf "Starting slapd ... ";
+printf "Starting FusionDirectory ... ";
 
 if [ -z $LDAP_DOMAIN ] ; then
     printf "\n\nLDAP_DOMAIN is not defined!\n"
     exit 1
 fi
 
-if [ -z $LDAP_ROOTPW ] ; then
-    printf "\n\nLDAP_ROOTPW is not defined!\n"
+if [ -z $LDAP_ADMIN_PW ] ; then
+    printf "\n\nLDAP_ADMIN_PW is not defined!\n"
     exit 1
 fi
 
@@ -16,7 +16,7 @@ IFS='.' read -a domain_elems <<< "$LDAP_DOMAIN"
 
 suffix=""
 for elem in "${domain_elems[@]}" ; do
-    if [ "x$suffix" = x ] ; then 
+    if [ "x$suffix" = x ] ; then
   suffix="dc=$elem"
     else
   suffix="$suffix,dc=$elem"
@@ -26,7 +26,11 @@ done
 basedn="dc=`echo $LDAP_DOMAIN | sed 's/^\.//; s/\.$//; s/\./,dc=/g'`"
 dc="`echo $LDAP_DOMAIN | sed 's/^\.//; s/\..*$//'`"
 
-printf "Admin DN is cn=manager,$suffix\n\n"
+if [ -z $LDAP_ADMIN_DN ] ; then
+    LDAP_ADMIN_DN="cn=Manager,$basedn"
+    printf "\n\nLDAP_ADMIN_DN is not defined and set to '$LDAP_ADMIN_DN'!\n"
+fi
+
 
 cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
 <?xml version="1.0"?>
@@ -60,8 +64,8 @@ cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
         config="ou=fusiondirectory,ou=configs,ou=systems,$suffix">
 
         <referral URI="$LDAP_SERVER_URL/$suffix"
-                        adminDn="cn=admin,$suffix"
-                        adminPassword="$LDAP_ROOTPW" />
+                        adminDn="$LDAP_ADMIN_DN"
+                        adminPassword="$LDAP_ADMIN_PW" />
     </location>
   </main>
 </conf>
