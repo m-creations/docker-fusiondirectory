@@ -31,6 +31,8 @@ To check Fusiondirectory's GUI fo http://localhost:12080 in interet browser insi
 For instlling more plugin, it is possible to add more packages for installing to Dockerfile like 
 ```fusiondirectory-plugin-alias=${FUSIONDIRECTORY_DEB_PKG_VERSION}```
 
+For manipulating Ldap without GUI you can use Fusiondirectory Web service which its documents are available [here](http://documentation.fusiondirectory.org/en/documentation/plugin/webservice_plugin).
+
 Github Repo
 -----------
 https://github.com/m-creations/docker-fusiondirectory
