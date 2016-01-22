@@ -7,8 +7,8 @@ if [ -z $LDAP_DOMAIN ] ; then
     exit 1
 fi
 
-if [ -z $LDAP_ADMIN_PW ] ; then
-    printf "\n\nLDAP_ADMIN_PW is not defined!\n"
+if [ -z $LDAP_ROOTPW ] ; then
+    printf "\n\nLDAP_ROOTPW is not defined!\n"
     exit 1
 fi
 
@@ -26,11 +26,9 @@ done
 basedn="dc=`echo $LDAP_DOMAIN | sed 's/^\.//; s/\.$//; s/\./,dc=/g'`"
 dc="`echo $LDAP_DOMAIN | sed 's/^\.//; s/\..*$//'`"
 
-if [ -z $LDAP_ADMIN_DN ] ; then
-    LDAP_ADMIN_DN="cn=Manager,$basedn"
-    printf "\n\nLDAP_ADMIN_DN is not defined and set to '$LDAP_ADMIN_DN'!\n"
-fi
+LDAP_ADMIN_DN="cn=${LDAP_ROOT},$basedn"
 
+printf "\n\nLDAP_ADMIN_DN is set to '$LDAP_ADMIN_DN'!\n"
 
 cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
 <?xml version="1.0"?>
@@ -65,7 +63,7 @@ cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
 
         <referral URI="$LDAP_SERVER_URL/$suffix"
                         adminDn="$LDAP_ADMIN_DN"
-                        adminPassword="$LDAP_ADMIN_PW" />
+                        adminPassword="$LDAP_ROOTPW" />
     </location>
   </main>
 </conf>

@@ -1,40 +1,49 @@
-fusiondirectory
-===============
-A docker image for Fusiondirectory's GUI.
+FusionDirectory Docker Container
+================================
+
+A docker image for [Fusiondirectory](http://fusiondirectory.org), a
+powerful web interface in front of Directory using LDAP v3 protocol.
 
 How to use
 ----------
-This docker image to run needs a LDAP server for which Fusiondirectory's LDAP schemas have been imported. Already m-creations prepaired one docker which support Fusiondirectory https://github.com/m-creations/docker-fusiondirectory-ldap on github for running it as a LDAP docker server:
+
+This docker image needs an LDAP server which contains
+Fusiondirectory's LDAP schemas. You can use
+[mcreations/fusiondirectory-ldap](https://hub.docker.com/r/mcreations/fusiondirectory-ldap)
+which keeps the persistent data in a Docker volume at `/data`.
+
 ```
-mkdir ~/my-example.com
-docker run --name ldap-server-fd -p 389:389 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -v ~/my-example.com:/var/openldap-data -h ldapsrv.example.com --rm -it mcreations/openwrt-ldap-fd
-```
-Now you can run a docker of Fusiondirectory GUI which has been linked with previous LDAP server with --link facility of docker as follows
-```
-docker run -p 12080:80 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret --link ldap-server-fd:ldap-server --rm -it mcreations/debian-fusion-directory
+docker run -d --name ldap -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -h ldapsrv.example.com mcreations/fusiondirectory-ldap
 ```
 
-Give it two env vars for connecting to LDAP server:
+Now you can run this container with a link to that LDAP server, named `ldap-server`:
 
-* `LDAP_HOST` default value is ldap-server
-* `ldap-server` should link with this name with an existing mcreations/openwrt-ldap-fd docker container with --link switch or should be a defined host with --add-host switch
-  * `--link` `<ldap-docker-name>`:ldap-server
-  * `--add-host` ldap-server:`<ldap-server-ip-address>`
-* `LDAP_PORT` default is 389
-* `LDAP_SERVER_URL` default value is ldap://${LDAP_HOST}:${LDAP_PORT}
-* `LDAP_DOMAIN`
-* `LDAP_ADMIN_PW`
-* `LDAP_ADMIN_DN` default value is cn=Manager,@SUFFIX@
+```
+docker run -d -p 12080:80 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret --link ldap:ldap-server --rm -it mcreations/fusiondirectory
+```
 
-To check Fusiondirectory's GUI fo http://localhost:12080 in interet browser insice docker host.
+Now open http://localhost:12080 and login as `fd-admin` using `LDAP_ROOTPW` as password.
 
-For instlling more plugin, it is possible to add more packages for installing to Dockerfile like 
-`fusiondirectory-plugin-alias=${FUSIONDIRECTORY_DEB_PKG_VERSION}`
+Connection variables
+--------------------
 
-For manipulating Ldap without GUI you can use Fusiondirectory Web service which its documents are available [here](http://documentation.fusiondirectory.org/en/documentation/plugin/webservice_plugin)
+These environment variables are used to connect to the LDAP server:
+
+* `LDAP_HOST`: ldap server (default: `ldap-server`)
+* `LDAP_PORT`: tcp port on ldap server (default: `389`)
+* `LDAP_SERVER_URL`: combination of protocol, host, and port (default: `ldap://${LDAP_HOST}:${LDAP_PORT}`)
+* `LDAP_DOMAIN`: LDAP domain (default: `example.com`)
+* `LDAP_ROOT` - admin user which is used to bind to the LDAP server (default: `admin` which expands to `cn=admin,@SUFFIX@`)
+* `LDAP_ROOTPW` - LDAP password of the admin user
+
+Web Service Access
+------------------
+
+For programmatic access to the FusionDirectory functionality, you can
+use the [FusionDirectory web service](http://documentation.fusiondirectory.org/en/documentation/plugin/webservice_plugin).
 
 
 Github Repo
 -----------
-https://github.com/m-creations/docker-fusiondirectory
 
+https://github.com/m-creations/docker-fusiondirectory
