@@ -19,7 +19,7 @@ docker run -d --name ldap -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -h ld
 Now you can run this container with a link to that LDAP server, named `ldap-server`:
 
 ```
-docker run -d -p 12080:80 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret --link ldap:ldap-server --rm -it mcreations/fusiondirectory
+docker run -d -p 12080:80 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -e LDAP_ROOTDN="cn=Manager,dc=example,dc=com" --link ldap:ldap-server --rm -it mcreations/fusiondirectory
 ```
 
 Now open http://localhost:12080 and login as `fd-admin` using `LDAP_ROOTPW` as password.
@@ -33,8 +33,8 @@ These environment variables are used to connect to the LDAP server:
 * `LDAP_PORT`: tcp port on ldap server (default: `389`)
 * `LDAP_SERVER_URL`: combination of protocol, host, and port (default: `ldap://${LDAP_HOST}:${LDAP_PORT}`)
 * `LDAP_DOMAIN`: LDAP domain (default: `example.com`)
-* `LDAP_ROOT` - admin user which is used to bind to the LDAP server (default: `admin` which expands to `cn=admin,@SUFFIX@`)
-* `LDAP_ROOTPW` - LDAP password of the admin user
+* `LDAP_ROOTDN` - the ROOT DN of ldap server default is: `cn=Manager,@SUFFIX@`)
+* `LDAP_ROOTPW` - The ROOT password of the ROOTDN of LDAP server
 
 Web Service Access
 ------------------

@@ -26,9 +26,12 @@ done
 basedn="dc=`echo $LDAP_DOMAIN | sed 's/^\.//; s/\.$//; s/\./,dc=/g'`"
 dc="`echo $LDAP_DOMAIN | sed 's/^\.//; s/\..*$//'`"
 
-LDAP_ADMIN_DN="cn=${LDAP_ROOT},$basedn"
+if [ -z $LDAP_ROOTDN ] ; then
+  LDAP_ROOTDN="cn=${LDAP_ROOT},$basedn"
 
-printf "\n\nLDAP_ADMIN_DN is set to '$LDAP_ADMIN_DN'!\n"
+  printf "\n\n!!!!LDAP_ROOTDN is not defined and set to '$LDAP_ROOTDN'!!!!\n"
+fi
+
 
 cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
 <?xml version="1.0"?>
@@ -62,7 +65,7 @@ cat <<EOF > /etc/fusiondirectory/fusiondirectory.conf
         config="ou=fusiondirectory,ou=configs,ou=systems,$suffix">
 
         <referral URI="$LDAP_SERVER_URL/$suffix"
-                        adminDn="$LDAP_ADMIN_DN"
+                        adminDn="$LDAP_ROOTDN"
                         adminPassword="$LDAP_ROOTPW" />
     </location>
   </main>
