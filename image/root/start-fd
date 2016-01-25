@@ -74,6 +74,7 @@ EOF
 
 
 yes Yes | fusiondirectory-setup --check-config
+yes Yes | fusiondirectory-setup --check-config
 
 
 /usr/sbin/apachectl -DFOREGROUND
