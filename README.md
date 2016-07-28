@@ -19,7 +19,7 @@ docker run -d --name ldap -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -h ld
 Now you can run this container with a link to that LDAP server, named `ldap-server`:
 
 ```
-docker run -d -p 12080:80 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -e LDAP_ROOTDN="cn=Manager,dc=example,dc=com" --link ldap:ldap-server --rm -it mcreations/fusiondirectory
+docker run -d -p 12080:80 -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -e LDAP_ROOTDN="cn=admin,dc=example,dc=com" --link ldap:ldap-server mcreations/fusiondirectory
 ```
 
 Now open http://localhost:12080 and login as `fd-admin` using `LDAP_ROOTPW` as password.
