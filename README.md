@@ -2,7 +2,7 @@ FusionDirectory Docker Container
 ================================
 
 A docker image for [Fusiondirectory](http://fusiondirectory.org), a
-powerful web interface in front of Directory using LDAP v3 protocol.
+powerful web interface for LDAP.
 
 How to use
 ----------
@@ -13,7 +13,7 @@ Fusiondirectory's LDAP schemas. You can use
 which keeps the persistent data in a Docker volume at `/data`.
 
 ```
-docker run -d --name ldap -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret -h ldapsrv.example.com mcreations/fusiondirectory-ldap
+docker run -d --name ldap -e LDAP_DOMAIN=example.com -e LDAP_ROOTPW=secret mcreations/fusiondirectory-ldap
 ```
 
 Now you can run this container with a link to that LDAP server, named `ldap-server`:
@@ -33,7 +33,7 @@ These environment variables are used to connect to the LDAP server:
 * `LDAP_PORT`: tcp port on ldap server (default: `389`)
 * `LDAP_SERVER_URL`: combination of protocol, host, and port (default: `ldap://${LDAP_HOST}:${LDAP_PORT}`)
 * `LDAP_DOMAIN`: LDAP domain (default: `example.com`)
-* `LDAP_ROOTDN` - the ROOT DN of ldap server default is: `cn=Manager,@SUFFIX@`)
+* `LDAP_ROOTDN` - the ROOT DN of ldap server default is: `cn=Manager,<domain suffix, e.g. dc=example,dc=com`)
 * `LDAP_ROOTPW` - The ROOT password of the ROOTDN of LDAP server
 
 Web Service Access
