@@ -12,10 +12,7 @@ ENV LDAP_ROOT Manager
 
 ADD image/root/ /
 
-RUN wget -O /tmp/jsonrpcphp.tgz --progress=dot "http://www.jsonrpcphp.org/download.php?file=tgz&package=ligh" && \
-    tar -xvzf /tmp/jsonrpcphp.tgz -C /tmp && \
-    mkdir -p /usr/share/fusiondirectory/include/jsonrpcphp/ && \
-    cp -rf /tmp/jsonrpcphp/includes/* /usr/share/fusiondirectory/include/jsonrpcphp/ && \
+RUN chown -R root:root /usr/share/fusiondirectory/include/jsonrpcphp/ && \
     a2dissite 000-default && \
     a2disconf fusiondirectory && \
     a2ensite fusiondirectory
